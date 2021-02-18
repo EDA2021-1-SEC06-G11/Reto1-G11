@@ -37,12 +37,47 @@ los mismos.
 
 # Construccion de modelos
 
+def newCatalog():
+    catalog = {'videos': None,
+               'categories': None,}
+
+    catalog['videos'] = lt.newList()
+    catalog['categories'] = lt.newList('SINGLE_LINKED',
+                                 cmpfunction=comparecategorynames)
+
+    return catalog
+
 # Funciones para agregar informacion al catalogo
+
+def addVideo(catalog,video):
+    lt.addLast(catalog['videos'], video)
+
+
+def addCategoryID(catalog, category):
+    t = newCategoryID(category['name'], category['id'])
+    lt.addLast(catalog['categories'], t)
 
 # Funciones para creacion de datos
 
+def newCategoryID(id, name):
+    category = {'category_name':'', 'category_id': ''}
+    category['category_name'] = name
+    category['category_id'] = id
+    return category
+
+def newVideoCategory(category_id, video_id):
+    videocategory = {'category_id': category_id, 'video_id': video_id}
+    return videocategory
+
+
 # Funciones de consulta
 
+
 # Funciones utilizadas para comparar elementos dentro de una lista
+
+
+def comparecategorynames(name, category):
+    return (name==category['name'])
+
 
 # Funciones de ordenamiento
