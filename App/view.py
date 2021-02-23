@@ -37,18 +37,27 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Encontrarbuenos videos por categoría y país (G)")
+    print("2- Tipo de algoritmo de ordenamiento iterativo")
     print("3- Encontrar video tendencia por país (I)")
     print("4- Encontrarvideo tendencia por categoría (I)")
     print('5- Buscar los videos con más likes')
     print("0- Salir")
 
-def initCatalog():
-    return controller.initCatalog()
+def initCatalog(tipo_de_lista):
+    return controller.initCatalog(tipo_de_lista)
 
 def loadData(catalog):
     controller.loadData(catalog)
-
+    
+def printResults(ord_videos,sample=10):
+    size  = lt.size(ord_videos)
+    if size > sample:
+        print('Los primero ', sample, ' videos ordenados son:')
+        i = 0
+        while i <= sample:
+            video = lt.getElement(ord_videos, i)
+            print('Titulo: '+ video['title']+ ' Views: '+ video['views'])
+            i+=1
 catalog = None
 
 """
@@ -58,14 +67,21 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+
+        lista = input(str('Escriba que tipo de representacion de la lista desea: '))
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
+        catalog = initCatalog(lista)
         loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print('Categorias cargadas: ' + str(lt.size(catalog['categories'])))
 
     elif int(inputs[0]) == 2:
-        pass
+        tipo_algoritmo = input('Por favor escriba cual tipo de algoritmo desea entre "selection", "insertion" y "shell"')
+        size = input("Indique tamaño de la muestra: ")
+        list_sorted = controller.sortVideos(catalog,tipo_algoritmo,int(size))
+        print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
+                                          str(list_sorted[0]))
+        printResults(list_sorted[1])
 
 
     else:
