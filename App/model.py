@@ -83,7 +83,7 @@ def comparecategorynames(name, category):
     return (name==category['name'])
 
 def cmpVideosByViews(video1, video2):
-    if video1['views'] < video2['views']:
+    if float(video1['views']) > float(video2['views']):
         return True
     return False
 
