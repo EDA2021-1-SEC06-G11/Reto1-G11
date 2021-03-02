@@ -26,6 +26,9 @@ import controller
 from DISClib.ADT import list as lt
 assert cf
 
+default_limit = 1000
+sys.setrecursionlimit(default_limit*100)
+
 
 """
 La vista se encarga de la interacción con el usuario
@@ -76,11 +79,12 @@ while True:
         print('Categorias cargadas: ' + str(lt.size(catalog['categories'])))
 
     elif int(inputs[0]) == 2:
-        tipo_algoritmo = input('Por favor escriba cual tipo de algoritmo desea entre "selection", "insertion" y "shell"')
+        tipo_algoritmo = input('Por favor escriba cual tipo de algoritmo desea entre "selection", "insertion", "shell", "merge" o "quick"')
         size = input("Indique tamaño de la muestra: ")
         list_sorted = controller.sortVideos(catalog,tipo_algoritmo,int(size))
         print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
                                           str(list_sorted[0]))
+                        
         printResults(list_sorted[1])
 
 
