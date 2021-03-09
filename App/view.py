@@ -46,8 +46,8 @@ def printMenu():
     print('5- Buscar los videos con más likes')
     print("0- Salir")
 
-def initCatalog(tipo_de_lista):
-    return controller.initCatalog(tipo_de_lista)
+def initCatalog():
+    return controller.initCatalog()
 
 def loadData(catalog):
     controller.loadData(catalog)
@@ -67,6 +67,11 @@ catalog = None
 Menu principal
 """
 while True:
+    print('Cargando datos....')
+    catalog = initCatalog()
+    loadData(catalog)
+    print('Videos cargados: ' + str(lt.size(catalog['videos'])))
+    print('Categorias cargadas: ' + str(lt.size(catalog['categories'])))
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:

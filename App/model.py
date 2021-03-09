@@ -43,13 +43,13 @@ los mismos.
 
 # Construccion de modelos
 
-def newCatalog(tipo_de_lista):
+def newCatalog():
     catalog = {'videos': None,
                'categories': None,}
 
-    catalog['videos'] = lt.newList(tipo_de_lista)
-    catalog['categories'] = lt.newList(tipo_de_lista,
-                                 cmpfunction=comparecategorynames)
+    catalog['videos'] = lt.newList(datastructure='ARRAY_LIST')
+    catalog['categories'] = lt.newList(datastructure='ARRAY_LIST')
+                                 
 
     return catalog
 

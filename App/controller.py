@@ -32,8 +32,8 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo de Videos
 
-def initCatalog(tipo_de_lista):
-    catalog = model.newCatalog(tipo_de_lista)
+def initCatalog():
+    catalog = model.newCatalog()
     return catalog
 
 # Funciones para la carga de datos
