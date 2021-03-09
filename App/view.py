@@ -39,6 +39,7 @@ operación solicitada
 
 def printMenu():
     print("Bienvenido")
+    print('9- Cargar informacion en el catalogo')
     print("1- Cargar información en el catálogo")
     print("2- Tipo de algoritmo de ordenamiento iterativo")
     print("3- Encontrar video tendencia por país (I)")
@@ -52,36 +53,55 @@ def initCatalog():
 def loadData(catalog):
     controller.loadData(catalog)
     
-def printResults(ord_videos,sample=10):
+def printResults(ord_videos,sample):
     size  = lt.size(ord_videos)
     if size > sample:
         print('Los primero ', sample, ' videos ordenados son:')
         i = 0
-        while i <= sample:
+        while i < sample:
             video = lt.getElement(ord_videos, i)
-            print('Titulo: '+ video['title']+ ' Views: '+ video['views'])
+            print('Titulo: '+ video['title']+' Channel title: '+video['channel_title']+' trending date: '+
+             video['trending_date']+ ' Country'+ video['country']+ ' Views: '+ video['views']+' likes: '+
+              video['likes']+' dislikes: '+ video['dislikes'])
             i+=1
+
+def printResultsR1(list_sorted,sample):
+    size  = lt.size(list_sorted)
+    if int(size) > int(sample):
+        print('Los primero ', sample, ' videos ordenados son:')
+        i = 1
+        while i <= int(sample):
+            video = lt.getElement(list_sorted, i)
+            print('Titulo: '+ video['title']+' Channel title: '+video['channel_title']+' trending date: '+
+            video['trending_date']+ ' Publish time'+ video['publish_time']+ ' Views: '+ video['views']+' likes: '+
+            video['likes']+' dislikes: '+ video['dislikes'])
+            i += 1
 catalog = None
 
 """
 Menu principal
 """
 while True:
-    print('Cargando datos....')
-    catalog = initCatalog()
-    loadData(catalog)
-    print('Videos cargados: ' + str(lt.size(catalog['videos'])))
-    print('Categorias cargadas: ' + str(lt.size(catalog['categories'])))
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
-    if int(inputs[0]) == 1:
-
-        lista = input(str('Escriba que tipo de representacion de la lista desea: '))
-        print("Cargando información de los archivos ....")
-        catalog = initCatalog(lista)
+    if int(inputs[0])==9:
+        print('Cargando datos....')
+        catalog = initCatalog()
         loadData(catalog)
         print('Videos cargados: ' + str(lt.size(catalog['videos'])))
         print('Categorias cargadas: ' + str(lt.size(catalog['categories'])))
+        printResults(catalog['videos'],1)
+        print(catalog['categories']['elements'])
+        
+        
+    elif int(inputs[0]) == 1:
+        n = input('Indique numero de videos que quiere listar: ')
+        category = input('Indique la categoria: ')
+        country = input('Indique el pais: ')
+        size = lt.size(catalog['videos'])
+        list_sorted = controller.sortVideosR1(catalog, int(size), category, country)
+        printResultsR1(list_sorted[1], n) 
+  
 
     elif int(inputs[0]) == 2:
         tipo_algoritmo = input('Por favor escriba cual tipo de algoritmo desea entre "selection", "insertion", "shell", "merge" o "quick"')

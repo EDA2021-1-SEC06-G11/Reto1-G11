@@ -50,8 +50,17 @@ def newCatalog():
     catalog['videos'] = lt.newList(datastructure='ARRAY_LIST')
     catalog['categories'] = lt.newList(datastructure='ARRAY_LIST')
                                  
-
     return catalog
+
+def modeloR1(catalog, category, country):
+    BestVideos = newCatalog()
+    for pos in range(0,int(lt.size(catalog['videos']))):
+        element = lt.getElement(catalog['videos'], pos)
+        if (element['country'] == country) and (int(element['category_id'])== (cmpVideosCategoryID(catalog, category))):
+            lt.addLast(BestVideos['videos'], element)
+    return BestVideos
+
+
 
 # Funciones para agregar informacion al catalogo
 
@@ -65,10 +74,10 @@ def addCategoryID(catalog, category):
 
 # Funciones para creacion de datos
 
-def newCategoryID(id, name):
-    category = {'category_name':'', 'category_id': ''}
-    category['category_name'] = name
-    category['category_id'] = id
+def newCategoryID(name, id):
+    category = {'name':'', 'id': ''}
+    category['name'] = name
+    category['id'] = id
     return category
 
 def newVideoCategory(category_id, video_id):
@@ -82,8 +91,6 @@ def newVideoCategory(category_id, video_id):
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 
-def comparecategorynames(name, category):
-    return (name==category['name'])
 
 def cmpVideosByViews(video1, video2):
     if float(video1['views']) > float(video2['views']):
@@ -99,23 +106,26 @@ def cmpVideosByID(video1, video2):
     else:
         return -1
 
+def cmpVideosCategoryID(catalog,category):
+    size = lt.size(catalog['categories'])
+    i = 0
+    centinela = False
+    while i <= size and centinela == False:
+        cat = lt.getElement(catalog['categories'], i)
+        if cat['name'].lower() == (' '+category):
+            respuesta = int(cat['id'])
+            centinela = True
+        i += 1
+    return respuesta
 
+        
 # Funciones de ordenamiento
 
-def sortVideos(catalog,sort_type,size):
+def sortVideos(catalog,size):
     sub_list = lt.subList(catalog['videos'], 0, size)
     sub_list = sub_list.copy()
     start_time = time.process_time()
-    if sort_type == 'shell':
-        sorted_list = ss.sort(sub_list, cmpVideosByViews)
-    elif sort_type == 'selection':
-        sorted_list = sel.sort(sub_list, cmpVideosByViews)
-    elif sort_type == 'insertion':
-        sorted_list = ins.sort(sub_list, cmpVideosByViews)
-    elif sort_type == 'merge':
-        sorted_list = mer.sort(sub_list, cmpVideosByViews)
-    elif sort_type == 'quick':
-        sorted_list = qui.sort(sub_list, cmpVideosByViews)
+    sorted_list = mer.sort(sub_list, cmpVideosByViews)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list

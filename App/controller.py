@@ -23,7 +23,7 @@
 import config as cf
 import model
 import csv
-
+from DISClib.ADT import list as lt
 
 
 """
@@ -62,10 +62,13 @@ def loadCategoryID(catalog):
         
 # Funciones de ordenamiento
 
-def sortVideos(catalog,type_sort, size):
+def sortVideosR1(catalog, size, category, country):
     """
     Ordena los libros por average_rating
     """
-    return model.sortVideos(catalog,type_sort, size)
+    BestVideos = model.modeloR1(catalog, category, country)
+    size2 = lt.size(BestVideos['videos'])
+    return model.sortVideos(BestVideos, int(size2))
+    
 # Funciones de consulta sobre el catálogo
 
