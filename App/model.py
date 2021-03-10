@@ -33,7 +33,7 @@ from DISClib.Algorithms.Sorting import insertionsort as ins
 from DISClib.Algorithms.Sorting import selectionsort as sel
 from DISClib.Algorithms.Sorting import mergesort as mer
 from DISClib.Algorithms.Sorting import quicksort as qui
-
+from datetime import datetime
 assert cf
 
 """
@@ -60,7 +60,21 @@ def modeloR1(catalog, category, country):
             lt.addLast(BestVideos['videos'], element)
     return BestVideos
 
+def modeloR2(catalog,country):
+    BestVideos = newCatalog()
+    for pos in range(0, int(lt.size(catalog['videos']))):
+        element = lt.getElement(catalog['videos'], pos)
+        if element['country'] == country:
+            lt.addLast(BestVideos['videos'], element)
+    return BestVideos
 
+def modeloR3(catalog,category):
+    BestVideos = newCatalog()
+    for pos in range(0, int(lt.size(catalog['videos']))):
+        element = lt.getElement(catalog['videos'], pos)
+        if int(element['category_id']) == (cmpVideosCategoryID(catalog, category)):
+            lt.addLast(BestVideos['videos'], element)
+    return BestVideos
 
 # Funciones para agregar informacion al catalogo
 
@@ -98,13 +112,6 @@ def cmpVideosByViews(video1, video2):
     else:
         return False
   
-def cmpVideosByID(video1, video2):
-    if int(video1['id'])> int(video2['id']):
-        return 1
-    elif int(video1['id']) == int(video2['id']):
-        return 0
-    else:
-        return -1
 
 def cmpVideosCategoryID(catalog,category):
     size = lt.size(catalog['categories'])
@@ -118,6 +125,41 @@ def cmpVideosCategoryID(catalog,category):
         i += 1
     return respuesta
 
+def cmpVideosByID(video1, video2):
+    if (video1['video_id']) < (video2['video_id']):
+        return True
+    else:
+        return False
+
+def rep(catalog, video, firstpos):
+    reps = 0
+    pos = firstpos
+    while pos <= lt.size(catalog):
+        cmpvideo = lt.getElement(catalog, pos)
+        if cmpvideo['video_id'] == video:
+            reps += 1
+        else:
+            break
+        pos += 1
+    return reps
+
+def cmpNumByID(catalog):
+    bestvideo = None
+    bestreps = 0
+    cmpvideo = None
+    cmpreps = 0
+    pos = 1
+    while pos <= lt.size(catalog):
+        cmpvideo = lt.getElement(catalog, pos)
+        cmpreps = rep(catalog, cmpvideo['video_id'], pos)
+        if cmpreps > bestreps:
+            bestvideo = lt.getElement(catalog, pos)
+            bestreps = cmpreps
+        pos += cmpreps
+    return (bestvideo,bestreps)
+
+
+
         
 # Funciones de ordenamiento
 
@@ -126,6 +168,15 @@ def sortVideos(catalog,size):
     sub_list = sub_list.copy()
     start_time = time.process_time()
     sorted_list = mer.sort(sub_list, cmpVideosByViews)
+    stop_time = time.process_time()
+    elapsed_time_mseg = (stop_time - start_time)*1000
+    return elapsed_time_mseg, sorted_list
+
+def sortVideosR2(catalog,size):
+    sub_list = lt.subList(catalog['videos'], 0, size)
+    sub_list = sub_list.copy()
+    start_time = time.process_time()
+    sorted_list = mer.sort(sub_list, cmpVideosByID)
     stop_time = time.process_time()
     elapsed_time_mseg = (stop_time - start_time)*1000
     return elapsed_time_mseg, sorted_list

@@ -40,11 +40,10 @@ operación solicitada
 def printMenu():
     print("Bienvenido")
     print('9- Cargar informacion en el catalogo')
-    print("1- Cargar información en el catálogo")
-    print("2- Tipo de algoritmo de ordenamiento iterativo")
-    print("3- Encontrar video tendencia por país (I)")
-    print("4- Encontrarvideo tendencia por categoría (I)")
-    print('5- Buscar los videos con más likes')
+    print("1- Encontrar buenos videos por categoría y país")
+    print("2- Encontrar video tendencia por país")
+    print("3- Encontrar video tendencia por categoría")
+    print("4- Buscar los videos con más likes")
     print("0- Salir")
 
 def initCatalog():
@@ -67,7 +66,7 @@ def printResults(ord_videos,sample):
 
 def printResultsR1(list_sorted,sample):
     size  = lt.size(list_sorted)
-    if int(size) > int(sample):
+    if int(size+1) > int(sample):
         print('Los primero ', sample, ' videos ordenados son:')
         i = 1
         while i <= int(sample):
@@ -76,6 +75,7 @@ def printResultsR1(list_sorted,sample):
             video['trending_date']+ ' Publish time'+ video['publish_time']+ ' Views: '+ video['views']+' likes: '+
             video['likes']+' dislikes: '+ video['dislikes'])
             i += 1
+
 catalog = None
 
 """
@@ -104,14 +104,24 @@ while True:
   
 
     elif int(inputs[0]) == 2:
-        tipo_algoritmo = input('Por favor escriba cual tipo de algoritmo desea entre "selection", "insertion", "shell", "merge" o "quick"')
-        size = input("Indique tamaño de la muestra: ")
-        list_sorted = controller.sortVideos(catalog,tipo_algoritmo,int(size))
-        print("Para la muestra de", size, " elementos, el tiempo (mseg) es: ",
-                                          str(list_sorted[0]))
-                        
-        printResults(list_sorted[1])
+        country = input('Indique el pais: ')
+        size = lt.size(catalog['videos'])
+        list_sorted = controller.sortVideosR2(catalog, size, country)
+        print(list_sorted)
 
+    elif int(inputs[0]) == 3:
+        category = input('indique la categoria: ')
+        size = lt.size(catalog['videos'])
+        list_sorted = controller.sortVideosR3(catalog, size, category)
+        print(list_sorted)
+
+    elif int(inputs[0]) == 4:
+        n = input('Indique numero de videos para listar: ')
+        country = input('Indique el pais: ')
+        category = input('Indique la categoria: ')
+        size = lt.size(catalog['videos'])
+        list_sorted = controller.sortVideosR3(catalog, size, category, country)
+        
 
     else:
         sys.exit(0)
