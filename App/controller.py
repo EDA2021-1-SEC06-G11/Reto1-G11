@@ -74,14 +74,21 @@ def sortVideosR2(catalog,size, country):
     BestVideos = model.modeloR2(catalog,country)
     size2 = lt.size(BestVideos['videos'])
     list_sorted = model.sortVideosR2(BestVideos, int(size2))
-    mayor = model.cmpNumByID(list_sorted[1])
+    mayor = model.cmpNumByID(list_sorted)
     return mayor
 
 def sortVideosR3(catalog,size, category):
     BestVideos = model.modeloR3(catalog,category)
     size2 = lt.size(BestVideos['videos'])
-    list_sorted = model.sortVideosR2(BestVideos, int(size2))
-    mayor = model.cmpNumByID(list_sorted[1])
+    list_sorted = model.sortVideosR3(BestVideos, int(size2))
+    mayor = model.cmpNumByName(list_sorted)
     return mayor
+
+def sortVideosR4(catalog, size, tag, country):
+    BestVideos = model.modeloR4(catalog, country, tag)
+    size2 = lt.size(BestVideos['videos'])
+    list_sorted = model.sortVideosR4(BestVideos, int(size2))
+    return list_sorted
+    
 # Funciones de consulta sobre el catálogo
 

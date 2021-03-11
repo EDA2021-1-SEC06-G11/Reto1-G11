@@ -76,6 +76,31 @@ def printResultsR1(list_sorted,sample):
             video['likes']+' dislikes: '+ video['dislikes'])
             i += 1
 
+def printResultsR2(video):
+        print('El video que tuvo más trending dates fue: ')
+        print('Titulo: '+ video[0]['title']+' Channel Title: '+video[0]['channel_title']+' Pais: '+ video[0]['country'] + ' Dias: '+ str(video[1]) )
+
+def printResultsR3(video):
+    print('El video que tuvo más trending dates fue: ')
+    print('Titulo: '+ video[0]['title']+' Channel Title: '+video[0]['channel_title']+' Category: '+ video[0]['category_id'] + ' Dias: '+ str(video[1]) )
+
+def printResultsR4(list_sorted,sample):
+    size  = lt.size(list_sorted)
+    lista = []
+    if int(size) > sample:
+        print('Los primero ', sample, ' videos ordenados son:')
+        i = 1
+        while i <= sample:
+            video = lt.getElement(list_sorted, i)
+            if video['title'] not in lista:
+                print('Titulo: '+ video['title']+' Channel title: '+video['channel_title']+' trending date: '+
+                video['trending_date']+ ' Publish time'+ video['publish_time']+ ' Views: '+ video['views']+' likes: '+
+                video['likes']+' dislikes: '+ video['dislikes'] + 'tags: '+video['tags'] +  'pais: '+video['country'])
+                lista.append(video['title'])
+            else:
+                sample+=1
+            i += 1
+
 catalog = None
 
 """
@@ -100,28 +125,29 @@ while True:
         country = input('Indique el pais: ')
         size = lt.size(catalog['videos'])
         list_sorted = controller.sortVideosR1(catalog, int(size), category, country)
-        printResultsR1(list_sorted[1], n) 
+        printResultsR1(list_sorted, n) 
   
 
     elif int(inputs[0]) == 2:
         country = input('Indique el pais: ')
         size = lt.size(catalog['videos'])
-        list_sorted = controller.sortVideosR2(catalog, size, country)
-        print(list_sorted)
+        video = controller.sortVideosR2(catalog, size, country)
+        printResultsR2(video)
 
     elif int(inputs[0]) == 3:
         category = input('indique la categoria: ')
         size = lt.size(catalog['videos'])
-        list_sorted = controller.sortVideosR3(catalog, size, category)
-        print(list_sorted)
+        video = controller.sortVideosR3(catalog, size, category)
+        printResultsR3(video)
+        
 
     elif int(inputs[0]) == 4:
         n = input('Indique numero de videos para listar: ')
         country = input('Indique el pais: ')
-        category = input('Indique la categoria: ')
+        tag = input('Indique el tag: ')
         size = lt.size(catalog['videos'])
-        list_sorted = controller.sortVideosR3(catalog, size, category, country)
-        
+        list_sorted = controller.sortVideosR4(catalog, size, tag, country)
+        printResultsR4(list_sorted,int(n))
 
     else:
         sys.exit(0)

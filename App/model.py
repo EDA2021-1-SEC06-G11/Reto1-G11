@@ -76,6 +76,17 @@ def modeloR3(catalog,category):
             lt.addLast(BestVideos['videos'], element)
     return BestVideos
 
+def modeloR4(catalog,country,tag):
+    BestVideos = newCatalog()
+    for pos in range(0, int(lt.size(catalog['videos']))):
+        element = lt.getElement(catalog['videos'], pos)
+        if element['country'] == country and cmpVideosTags(catalog,element, tag)== True:
+            
+            lt.addLast(BestVideos['videos'], element)
+                
+
+    return BestVideos
+
 # Funciones para agregar informacion al catalogo
 
 def addVideo(catalog,video):
@@ -104,10 +115,21 @@ def newVideoCategory(category_id, video_id):
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def cmpVideosByLikes(video1,video2):
+    if float(video1['likes']) > float(video2['likes']):
+        return True
+    else:
+        return False
 
 
 def cmpVideosByViews(video1, video2):
     if float(video1['views']) > float(video2['views']):
+        return True
+    else:
+        return False
+
+def cmpVideosByName(video1, video2):
+    if video1['title'] > video2['title']:
         return True
     else:
         return False
@@ -124,6 +146,17 @@ def cmpVideosCategoryID(catalog,category):
             centinela = True
         i += 1
     return respuesta
+    
+def cmpVideosTags(catalog,element, tag):
+    respuesta = False
+    taglist = element['tags'].split('|')
+    i = 0
+    while i < len(taglist) and respuesta == False:
+        t = taglist[i].find(tag)
+        if t != (-1):
+            respuesta = True
+        i += 1
+    return respuesta
 
 def cmpVideosByID(video1, video2):
     if (video1['video_id']) < (video2['video_id']):
@@ -131,7 +164,7 @@ def cmpVideosByID(video1, video2):
     else:
         return False
 
-def rep(catalog, video, firstpos):
+def repForID(catalog, video, firstpos):
     reps = 0
     pos = firstpos
     while pos <= lt.size(catalog):
@@ -151,32 +184,62 @@ def cmpNumByID(catalog):
     pos = 1
     while pos <= lt.size(catalog):
         cmpvideo = lt.getElement(catalog, pos)
-        cmpreps = rep(catalog, cmpvideo['video_id'], pos)
+        cmpreps = repForID(catalog, cmpvideo['video_id'], pos)
         if cmpreps > bestreps:
             bestvideo = lt.getElement(catalog, pos)
             bestreps = cmpreps
         pos += cmpreps
     return (bestvideo,bestreps)
 
+def repForName(catalog, video, pos):
+    reps = 0
+    while pos <= lt.size(catalog):
+        cmpvideo = lt.getElement(catalog,pos)
+        if cmpvideo['title'] == video:
+            reps += 1
+        else:
+            break
+        pos += 1
+    return reps
 
 
+def cmpNumByName(catalog):
+    bestvideo = None
+    bestreps = 0
+    cmpvideo= None
+    cmpreps = 0
+    pos = 1
+    while pos <= lt.size(catalog):
+        cmpvideo = lt.getElement(catalog, pos)
+        cmpreps = repForName(catalog, cmpvideo['title'], pos)
+        if cmpreps > bestreps:
+            bestvideo = cmpvideo
+            bestreps = cmpreps
+        pos += 1
+    return (bestvideo,bestreps)
         
 # Funciones de ordenamiento
 
 def sortVideos(catalog,size):
     sub_list = lt.subList(catalog['videos'], 0, size)
     sub_list = sub_list.copy()
-    start_time = time.process_time()
     sorted_list = mer.sort(sub_list, cmpVideosByViews)
-    stop_time = time.process_time()
-    elapsed_time_mseg = (stop_time - start_time)*1000
-    return elapsed_time_mseg, sorted_list
+    return sorted_list
 
 def sortVideosR2(catalog,size):
     sub_list = lt.subList(catalog['videos'], 0, size)
     sub_list = sub_list.copy()
-    start_time = time.process_time()
     sorted_list = mer.sort(sub_list, cmpVideosByID)
-    stop_time = time.process_time()
-    elapsed_time_mseg = (stop_time - start_time)*1000
-    return elapsed_time_mseg, sorted_list
+    return sorted_list
+
+def sortVideosR3(catalog, size):
+    sub_list = lt.subList(catalog['videos'], 0, size)
+    sub_list = sub_list.copy()
+    sorted_list = mer.sort(sub_list, cmpVideosByName)
+    return sorted_list
+
+def sortVideosR4(catalog, size):
+    sub_list = lt.subList(catalog['videos'], 0, size)
+    sub_list = sub_list.copy()
+    sorted_list = mer.sort(sub_list, cmpVideosByLikes)
+    return sorted_list
